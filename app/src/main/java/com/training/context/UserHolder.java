@@ -12,7 +12,7 @@ public class UserHolder {
         return threadLocal.get().getLogin();
     }
 
-    public User getUser(User user) {
+    public User getUser() {
         return threadLocal.get();
     }
 

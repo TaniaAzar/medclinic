@@ -18,6 +18,6 @@ public class AuditServiceImpl extends AbstractServiceIml<AuditOperation> impleme
 
     @Override
     public void create(boolean success, String name, Object... params) {
-        auditDao.create(success, name, params);
+        auditDao.create(success, name, params != null ? params : new Object[0]);
     }
 }

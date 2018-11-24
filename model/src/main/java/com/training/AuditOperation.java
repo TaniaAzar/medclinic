@@ -20,6 +20,9 @@ public class AuditOperation implements IEntity {
     @Column(name = "action")
     private String action;
 
+    public AuditOperation() {
+    }
+
     public AuditOperation(Integer id, Date date, boolean status, String action) {
         this.id = id;
         this.date = date;

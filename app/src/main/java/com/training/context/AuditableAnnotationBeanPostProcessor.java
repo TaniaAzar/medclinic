@@ -45,9 +45,6 @@ public class AuditableAnnotationBeanPostProcessor implements BeanPostProcessor {
                     (proxy, method, args) -> {
                         Object result = null;
 
-                        Field[] fields = originalBeanClass.getClass().getDeclaredFields();
-                        for (Field f : fields) {
-                            if (f.isAnnotationPresent(Auditable.class)) {
                                 boolean success = true;
                                 try {
                                     result = method.invoke(originalBeanClass, args);
@@ -57,8 +54,6 @@ public class AuditableAnnotationBeanPostProcessor implements BeanPostProcessor {
                                 } finally {
                                     auditService.create(success, userHolder.getName(), args);
                                 }
-                            }
-                        }
                         return result;
                     });
         }

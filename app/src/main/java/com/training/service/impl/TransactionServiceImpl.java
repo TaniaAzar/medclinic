@@ -11,8 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionServiceImpl extends AbstractServiceIml<Transaction> implements TransactionService{
 
+    private final TransactionDao transactionDao;
+
     @Autowired
-    private TransactionDao transactionDao;
+    public TransactionServiceImpl(TransactionDao transactionDao) {
+        super(transactionDao, transactionDao);
+        this.transactionDao = transactionDao;
+    }
 
     @Override
     public void transaction(Product product, Patient patient) {

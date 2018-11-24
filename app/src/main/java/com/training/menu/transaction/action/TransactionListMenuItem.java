@@ -7,12 +7,15 @@ import com.training.service.EntityListIdService;
 import com.training.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @TransactionMenuItem
 public class TransactionListMenuItem implements IMenuItem {
 
-    private final EntityListIdService<Transaction> transactionService;
+    private final TransactionService transactionService;
 
     @Autowired
     public TransactionListMenuItem(TransactionService transactionService) {
@@ -25,8 +28,10 @@ public class TransactionListMenuItem implements IMenuItem {
     }
 
     @Override
+    @Transactional
     public int doAction() {
-        transactionService.getAll().forEach(System.out::println);
+        List<Transaction> all = transactionService.getAll();
+        all.forEach(System.out::println);
         return 0;
     }
 }

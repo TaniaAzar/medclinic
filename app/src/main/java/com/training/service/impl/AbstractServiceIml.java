@@ -12,10 +12,16 @@ import java.util.List;
 
 public abstract class AbstractServiceIml<T extends IEntity> implements EntityCrudService<T>, EntityListIdService<T> {
 
-    @Autowired
     private EntityCrudDao<T> crudDao;
-    @Autowired
     private EntityListIdDao<T> listIdDao;
+
+    public AbstractServiceIml(EntityCrudDao<T> crudDao, EntityListIdDao<T> listIdDao) {
+        this.crudDao = crudDao;
+        this.listIdDao = listIdDao;
+    }
+
+    public AbstractServiceIml() {
+    }
 
     @Override
     @Transactional

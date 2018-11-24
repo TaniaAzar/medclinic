@@ -88,8 +88,19 @@ public class UserAuthorization implements Runnable {
         System.out.println("Please, enter password...");
         String password = scanner.nextLine();
 
-        User user = userService.getActiveUser(name, password);
-        userHolder.getUser(user);
+        User user = null;
+        try {
+            user = userService.getActiveUser(name, passwordSalt.createSalt(password));
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        if (user == null) {
+            throw new IllegalArgumentException();
+        }
+        userHolder.setUser(user);
         mainMenu.run();
     }
 
