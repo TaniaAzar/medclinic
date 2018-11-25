@@ -17,18 +17,6 @@ public class MainWorker {
         UserService userService = context.getBean(UserService.class);
         userService.doReport();
 
-        TransactionMapper transactionMapper = context.getBean(TransactionMapper.class);
-        StateMapper stateMapper = context.getBean(StateMapper.class);
-
-        State state = stateMapper.getStateById(1);
-        Transaction transaction = transactionMapper.getIdTransaction(1);
-        List<Transaction> transactionList = transactionMapper.getListTransaction();
-
-        System.out.println(state);
-        System.out.println(transaction);
-
-        transactionList.forEach(System.out::println);
-
         TransactionService transactionService = context.getBean(TransactionService.class);
         transactionService.doReport();
     }

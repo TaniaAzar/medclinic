@@ -14,6 +14,8 @@ import java.util.List;
 @Service
 public class TransactionService {
 
+    private static String[] COLUMNS = {"Id", "Date", "Phone", "Product"};
+
     private final TransactionMapper transactionMapper;
 
     @Autowired
@@ -27,40 +29,41 @@ public class TransactionService {
 
         Workbook workbook = new XSSFWorkbook();
 
+        CreationHelper createHelper = workbook.getCreationHelper();
+
         Sheet sheet = workbook.createSheet("Transactions");
 
         Row headerRow = sheet.createRow(0);
 
-        //id cell
-        Cell idCell = headerRow.createCell(0);
-        idCell.setCellValue("Id");
-
-        //date cell
-        Cell dateCell = headerRow.createCell(1);
-        dateCell.setCellValue("date");
-
-        //phone cell
-        Cell phoneCell = headerRow.createCell(2);
-        phoneCell.setCellValue("phone");
-
-        //product cell
-        Cell productCell = headerRow.createCell(3);
-        productCell.setCellValue("product");
+        //header
+        for (int col = 0; col < COLUMNS.length; col++) {
+            Cell cell = headerRow.createCell(col);
+            cell.setCellValue(COLUMNS[col]);
+        }
 
         DataFormat format = workbook.createDataFormat();
         CellStyle dateStyle = workbook.createCellStyle();
         dateStyle.setDataFormat(format.getFormat("dd.mm.yyyy"));
 
-        int rowIdx = 1;
-        for (Transaction transaction : transactions){
-            Row row = sheet.createRow(rowIdx++);
+        for (int i = 0; i < transactions.size(); i++) {
+            Row row = sheet.createRow(i + 1);
+            Transaction transaction = transactions.get(i);
 
-            row.createCell(0).setCellValue(transaction.getId());
-            row.createCell(1).setCellValue(transaction.getDate());
-            row.createCell(2).setCellValue(transaction.getPatient_id().getPhone());
-            row.createCell(3).setCellValue(transaction.getProduct_id().getName());
+            Cell idDataCell = row.createCell(0);
+            idDataCell.setCellValue(transaction.getId());
+
+            Cell dateDataCell = row.createCell(1);
+            dateDataCell.setCellStyle(dateStyle);
+            dateDataCell.setCellValue(transaction.getDate());
+
+            Cell phoneDataCell = row.createCell(2);
+            phoneDataCell.setCellValue(transaction.getPatient_id().getPhone());
+
+            Cell productDataCell = row.createCell(3);
+            productDataCell.setCellValue(transaction.getProduct_id().getName());
         }
 
+        sheet.autoSizeColumn(1);
         FileOutputStream fileOut = new FileOutputStream("transactions.xlsx");
         workbook.write(fileOut);
         fileOut.close();

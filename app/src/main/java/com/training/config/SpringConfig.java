@@ -1,5 +1,6 @@
 package com.training.config;
 
+import com.training.dto.impl.AuditorAwareImpl;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -16,6 +18,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import  org.springframework.data.jpa.repository.config.EnableJpaAuditing ;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
@@ -26,6 +29,7 @@ import java.util.Properties;
 @PropertySource("classpath:liquibase.properties")
 @ComponentScan("com.training")
 @EnableTransactionManagement
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class SpringConfig {
 
     @Autowired
@@ -102,4 +106,8 @@ public class SpringConfig {
         env.setActiveProfiles(profiles.split(","));
     }
 
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return new AuditorAwareImpl();
+    }
 }
