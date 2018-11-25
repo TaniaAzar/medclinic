@@ -1,10 +1,14 @@
 package com.training;
 
 import com.training.config.WorkerConfig;
+import com.training.mapper.StateMapper;
+import com.training.mapper.TransactionMapper;
+import com.training.service.TransactionService;
 import com.training.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainWorker {
     public static void main(String[] args) throws IOException {
@@ -12,5 +16,20 @@ public class MainWorker {
 
         UserService userService = context.getBean(UserService.class);
         userService.doReport();
+
+        TransactionMapper transactionMapper = context.getBean(TransactionMapper.class);
+        StateMapper stateMapper = context.getBean(StateMapper.class);
+
+        State state = stateMapper.getStateById(1);
+        Transaction transaction = transactionMapper.getIdTransaction(1);
+        List<Transaction> transactionList = transactionMapper.getListTransaction();
+
+        System.out.println(state);
+        System.out.println(transaction);
+
+        transactionList.forEach(System.out::println);
+
+        TransactionService transactionService = context.getBean(TransactionService.class);
+        transactionService.doReport();
     }
 }

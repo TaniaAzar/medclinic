@@ -1,5 +1,7 @@
 package com.training.config;
 
+import com.training.mapper.StateMapper;
+import com.training.mapper.TransactionMapper;
 import com.training.mapper.UserMapper;
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.io.ClassPathResource;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.annotation.PostConstruct;
@@ -69,8 +72,22 @@ public class WorkerConfig {
     }
 
     @Bean
-    public MapperFactoryBean<UserMapper> stateMapperFactory(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public MapperFactoryBean<StateMapper> stateMapperFactory(SqlSessionFactory sqlSessionFactory) throws Exception {
+        MapperFactoryBean<StateMapper> factoryBean = new MapperFactoryBean<>(StateMapper.class);
+        factoryBean.setSqlSessionFactory(sqlSessionFactory);
+        return factoryBean;
+    }
+
+    @Bean
+    public MapperFactoryBean<UserMapper> userMapperFactory(SqlSessionFactory sqlSessionFactory) throws Exception {
         MapperFactoryBean<UserMapper> factoryBean = new MapperFactoryBean<>(UserMapper.class);
+        factoryBean.setSqlSessionFactory(sqlSessionFactory);
+        return factoryBean;
+    }
+
+    @Bean
+    public MapperFactoryBean<TransactionMapper> transactionMapperFactory(SqlSessionFactory sqlSessionFactory) throws Exception {
+        MapperFactoryBean<TransactionMapper> factoryBean = new MapperFactoryBean<>(TransactionMapper.class);
         factoryBean.setSqlSessionFactory(sqlSessionFactory);
         return factoryBean;
     }

@@ -29,8 +29,6 @@ public class UserService {
 
         Workbook workbook = new XSSFWorkbook();
 
-        CreationHelper createHelper = workbook.getCreationHelper();
-
         Sheet sheet = workbook.createSheet("Users");
 
         Row headerRow = sheet.createRow(0);
